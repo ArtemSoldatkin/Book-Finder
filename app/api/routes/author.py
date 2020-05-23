@@ -17,11 +17,10 @@ def addNewAuthor():
 @bp.route("/get-authors", methods=["GET"])
 def getAuthorsList():
     authors = getAuthors()
-    for author in authors:
-        print(author.name, flush=True)
-    return jsonify(message="OK"), 200
+    return jsonify(authorList=authors), 200
 
 
-@bp.route("/get-author/:id", methods=["GET"])
-def getAuthor():
-    pass
+@bp.route("/get-author/<id>", methods=["GET"])
+def getAuthor(id):
+    author = getAuthorByID(id)
+    return jsonify(author=author)

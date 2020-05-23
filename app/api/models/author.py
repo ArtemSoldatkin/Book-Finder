@@ -1,4 +1,5 @@
-from api.models import db
+from api.models import db, datetimeToJson
+from api.models.book import Book
 
 
 class Author(db.Model):
@@ -6,19 +7,12 @@ class Author(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
+    birth = db.Column(db.DateTime, nullable=False)
     books = db.relationship("Book")
 
-    def __init__(self, name):
+    def __init__(self, name, birth):
         self.name = name
+        self.birth = birth
 
-
-class Book(db.Model):
-    __tablename__ = "books"
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(128), nullable=False)
-    authorID = db.Column(db.Integer, db.ForeignKey("authors.id"))
-
-    def __init__(self, title, authorID):
-        self.title = title
-        self.authorID = authorID
+    def serialize(self):
+        return {"id": self.id, "name": self.name, "birth": datetimeToJson(self.birth)}
