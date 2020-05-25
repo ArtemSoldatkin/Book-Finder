@@ -4,18 +4,44 @@ from api.models import db
 from api.models.author import Author
 
 
-def addAuthor(name):
+def addAuthor(name: str):
+    """Add new author to DB"""
+    # add birth and convert string to datetime
+    if not name:
+        abort(400)
     author = Author(name, birth=datetime.now())
     db.session.add(author)
     db.session.commit()
 
 
-def getAuthors():
+def editAuthorByID(id: int, name: str, birth: str):
+    """Edit author by ID"""
+    if not id:
+        abort(400)
+    author = Author.query.get(id)
+    if not author:
+        abort(404)
+    if name:
+        author.name = name
+    if birth:
+        author.birth = birth
+    db.session.commit()
+
+
+def removeAuthorByID(id: int):
+    """Remove author from DB by ID"""
+    Author.query.filter_by(id=id).delete()
+    db.session.commit()
+
+
+def getListOfAuthors() -> [Author]:
+    """Get list of authors from DB"""
     authors = Author.query.all()
     return [author.serialize() for author in authors]
 
 
-def getAuthorByID(id):
+def getAuthorByID(id: int) -> Author:
+    """Get author from DB by ID"""
     if not id:
         abort(400)
     author = Author.query.get(id)

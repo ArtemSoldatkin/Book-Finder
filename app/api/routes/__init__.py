@@ -7,3 +7,9 @@ bp = Blueprint("errors", __name__)
 def handle400(err):
     app.logger.error(err)
     return jsonify(message="Wrong parameters"), 400
+
+
+@bp.app_errorhandler(404)
+def handle404(err):
+    app.logger.error(err)
+    return jsonify(message="Not found"), 404
