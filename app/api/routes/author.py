@@ -35,7 +35,7 @@ def getAuthors():
     return jsonify(authors=authors), 200
 
 
-@bp.route("/filter-authors", methods=["POST"])
+@bp.route("/filter-authors", methods=["GET"])
 def filterAuthors():
     data = request.get_json()
     name = data.get("name")
