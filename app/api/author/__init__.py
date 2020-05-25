@@ -39,6 +39,23 @@ def getListOfAuthors() -> [Author]:
     authors = Author.query.all()
     return [author.serialize() for author in authors]
 
+# add find authors
+# change filter
+
+
+def filterListOfAuthors(name: str, birth: datetime) -> [Author]:
+    """Filter authors by name / birth"""
+    authors = None
+    if name and birth:
+        authors = Author.query.filter_by(name=name, birth=birth)
+    elif name:
+        authors = Author.query.filter_by(name=name)
+    elif birth:
+        authors = Author.query.filter_by(birth=birth)
+    if authors:
+        return [author.serialize() for author in authors]
+    abort(400)
+
 
 def getAuthorByID(id: int) -> Author:
     """Get author from DB by ID"""
