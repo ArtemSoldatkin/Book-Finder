@@ -1,15 +1,14 @@
-from datetime import datetime
 from flask import abort
+from api.utils import checkDate
 from api.models import db
 from api.models.author import Author
 
 
-def addAuthor(name: str):
+def addAuthor(name: str, birth: str):
     """Add new author to DB"""
-    # add birth and convert string to datetime
-    if not name:
+    if not name or not checkDate(birth):
         abort(400)
-    author = Author(name, birth=datetime.now())
+    author = Author(name, birth)
     db.session.add(author)
     db.session.commit()
 
@@ -34,26 +33,18 @@ def removeAuthorByID(id: int):
     db.session.commit()
 
 
-def getListOfAuthors() -> [Author]:
+def getListOfAuthors(page: int, perPage: int) -> [Author]:
     """Get list of authors from DB"""
-    authors = Author.query.all()
-    return [author.serialize() for author in authors]
-
-# add find authors
-# change filter
+    authors = Author.query.paginate(page=page, per_page=perPage)
+    return [author.serialize() for author in authors.items]
 
 
-def filterListOfAuthors(name: str, birth: datetime) -> [Author]:
+def filterListOfAuthors(name: str, birth: str, page: int, perPage: int) -> [Author]:
     """Filter authors by name / birth"""
-    authors = None
-    if name and birth:
-        authors = Author.query.filter_by(name=name, birth=birth)
-    elif name:
-        authors = Author.query.filter_by(name=name)
-    elif birth:
-        authors = Author.query.filter_by(birth=birth)
+    authors = Author.query.filter(Author.name.ilike(
+        f"%{name}%")).filter(Author.birth.ilike(f"%{birth}%")).paginate(page=page, per_page=perPage)
     if authors:
-        return [author.serialize() for author in authors]
+        return [author.serialize() for author in authors.items]
     abort(400)
 
 

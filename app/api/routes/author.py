@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, abort, request
+from api.constants import PAGE, PER_PAGE
 from api.author import (addAuthor, editAuthorByID,
                         removeAuthorByID, getListOfAuthors, getAuthorByID, filterListOfAuthors)
+
 
 bp = Blueprint("author_routes", __name__)
 
@@ -9,7 +11,8 @@ bp = Blueprint("author_routes", __name__)
 def addNewAuthor():
     data = request.get_json()
     name = data.get("name")
-    addAuthor(name)
+    birth = data.get("birth")
+    addAuthor(name, birth)
     return jsonify(message="OK"), 200
 
 
@@ -31,16 +34,21 @@ def removeAuthor(id):
 # Add pages (max count of author per request)
 @bp.route("/get-authors", methods=["GET"])
 def getAuthors():
-    authors = getListOfAuthors()
+    data = request.get_json()
+    page = data.get("page") or PAGE
+    perPage = data.get("per_page") or PER_PAGE
+    authors = getListOfAuthors(page, perPage)
     return jsonify(authors=authors), 200
 
 
 @bp.route("/filter-authors", methods=["GET"])
 def filterAuthors():
     data = request.get_json()
-    name = data.get("name")
-    birth = data.get("birth")
-    authors = filterListOfAuthors(name, birth)
+    name = data.get("name") or ""
+    birth = data.get("birth") or ""
+    page = data.get("page") or PAGE
+    perPage = data.get("per_page") or PER_PAGE
+    authors = filterListOfAuthors(name, birth, page, perPage)
     return jsonify(authors=authors), 200
 
 
