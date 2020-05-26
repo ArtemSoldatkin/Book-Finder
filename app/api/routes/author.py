@@ -31,7 +31,6 @@ def removeAuthor(id):
     return jsonify(message="OK"), 200
 
 
-# Add pages (max count of author per request)
 @bp.route("/get-authors", methods=["GET"])
 def getAuthors():
     data = request.get_json()
