@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, abort, request
 from api.constants import PAGE, PER_PAGE
-from api.author import (addAuthor, editAuthorByID,
+from api.author import (addNewAuthor, editAuthorByID,
                         removeAuthorByID, getListOfAuthors, getAuthorByID, filterListOfAuthors)
 
 
@@ -8,11 +8,11 @@ bp = Blueprint("author_routes", __name__)
 
 
 @bp.route("/add-author", methods=["POST"])
-def addNewAuthor():
+def addAuthor():
     data = request.get_json()
     name = data.get("name")
     birth = data.get("birth")
-    addAuthor(name, birth)
+    addNewAuthor(name, birth)
     return jsonify(message="OK"), 200
 
 

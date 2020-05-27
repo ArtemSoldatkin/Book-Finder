@@ -4,11 +4,11 @@ from api.models import db
 from api.models.author import Author
 
 
-def addAuthor(name: str, birth: str):
+def addNewAuthor(name: str, birth: str):
     """Add new author to DB"""
     if not name or not checkDate(birth):
         abort(400)
-    author = Author(name, birth)
+    author = Author(name=name, birth=birth)
     db.session.add(author)
     db.session.commit()
 
