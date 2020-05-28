@@ -17,5 +17,4 @@ class Book(db.Model):
         self.authorID = authorID
 
     def serialize(self):
-        # TODO add author name
-        return {"id": self.id, "yearOfPublication": self.yearOfPublication, "genre": self.genre, "authorID": self.authorID}
+        return {"id": self.id, "yearOfPublication": self.yearOfPublication, "genre": self.genre, "author": self.author.serialize()}

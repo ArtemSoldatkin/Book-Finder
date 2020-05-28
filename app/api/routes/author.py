@@ -9,7 +9,7 @@ bp = Blueprint("author_routes", __name__)
 
 @bp.route("/add-author", methods=["POST"])
 def addAuthor():
-    data = request.get_json()
+    data = request.get_json() or {}
     name = data.get("name")
     birth = data.get("birth")
     addNewAuthor(name, birth)
@@ -18,7 +18,7 @@ def addAuthor():
 
 @bp.route("/edit-author/<id>", methods=["PUT"])
 def editAuthor(id):
-    data = request.get_json()
+    data = request.get_json() or {}
     name = data.get("name")
     birth = data.get("birth")
     editAuthorByID(id, name, birth)
@@ -33,7 +33,7 @@ def removeAuthor(id):
 
 @bp.route("/get-authors", methods=["GET"])
 def getAuthors():
-    data = request.get_json()
+    data = request.get_json() or {}
     page = data.get("page") or PAGE
     perPage = data.get("per_page") or PER_PAGE
     authors = getListOfAuthors(page, perPage)
@@ -42,7 +42,7 @@ def getAuthors():
 
 @bp.route("/filter-authors", methods=["GET"])
 def filterAuthors():
-    data = request.get_json()
+    data = request.get_json() or {}
     name = data.get("name") or ""
     birth = data.get("birth") or ""
     page = data.get("page") or PAGE

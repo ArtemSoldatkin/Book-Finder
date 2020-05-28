@@ -9,7 +9,7 @@ bp = Blueprint("book_routes", __name__)
 
 @bp.route("/add-book", methods=["POST"])
 def addBook():
-    data = request.get_json()
+    data = request.get_json() or {}
     title = data.get("title")
     yearOfPublication = data.get("year_of_publication")
     genre = data.get("genre")
@@ -20,7 +20,7 @@ def addBook():
 
 @bp.route("/edit-book/<id>", methods=["PUT"])
 def editBook(id):
-    data = request.get_json()
+    data = request.get_json() or {}
     title = data.get("title")
     yearOfPublication = data.get("year_of_publication")
     genre = data.get("genre")
@@ -37,7 +37,7 @@ def removeBook(id):
 
 @bp.route("/get-books", methods=["GET"])
 def getBooks():
-    data = request.get_json()
+    data = request.get_json() or {}
     page = data.get("page") or PAGE
     perPage = data.get("per_page") or PER_PAGE
     books = getBookList(page, perPage)

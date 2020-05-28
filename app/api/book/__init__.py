@@ -1,12 +1,15 @@
 from flask import abort
 from api.models import db
 from api.models.book import Book
+from api.models.author import Author
+from api.book.utils import checkYearOfPublication
 
 
 def addNewBook(title: str, yearOfPublication: str, genre: str, authorID: int):
     """Add book to DB"""
-    if not title or not yearOfPublication or not genre or not authorID:
+    if not title or not checkYearOfPublication(yearOfPublication) or not genre or not authorID:
         abort(400)
+    # TODO check author ID
     book = Book(title=title, yearOfPublication=yearOfPublication,
                 genre=genre, authorID=authorID)
     db.session.add(book)
@@ -14,7 +17,6 @@ def addNewBook(title: str, yearOfPublication: str, genre: str, authorID: int):
 
 
 def editBookByID(id: int, title: str, yearOfPublication: str, genre: str, authorID: int):
-    # TODO add check for yearOfPublication
     """Edit book by ID"""
     book = Book.query.get(id)
     if not book:

@@ -8,7 +8,7 @@ class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False)
     birth = db.Column(db.String(10), nullable=False)
-    books = db.relationship("Book")
+    books = db.relationship("Book", backref=db.backref('author'))
 
     def __init__(self, name, birth):
         self.name = name
