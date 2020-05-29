@@ -10,7 +10,7 @@ class Book(db.Model):
     genre = db.Column(db.String(64), nullable=False)
     authorID = db.Column(db.Integer, db.ForeignKey("authors.id"))
 
-    def __init__(self, title, yearOfPublication, genre, authorID):
+    def __init__(self, title: str, yearOfPublication: str, genre: str, authorID: int):
         self.title = title
         self.yearOfPublication = yearOfPublication
         self.genre = genre

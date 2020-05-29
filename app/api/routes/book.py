@@ -52,6 +52,13 @@ def getBook(id):
 
 @bp.route("/filter-books", methods=["GET"])
 def filterBooks():
-    # WIP
-    books = []  # filterBooksBy()
+    data = request.get_json() or {}
+    title = data.get("title")
+    yearOfPublication = data.get("year_of_publication")
+    genre = data.get("genre")
+    authorName = data.get("author_name")
+    page = data.get("page") or PAGE
+    perPage = data.get("per_page") or PER_PAGE
+    books = filterBooksBy(title, yearOfPublication,
+                          genre, authorName, page, perPage)
     return jsonify(books=books), 200

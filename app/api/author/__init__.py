@@ -1,4 +1,4 @@
-from flask import abort
+from flask import abort, current_app as app
 from api.utils import checkDate
 from api.models import db
 from api.models.author import Author
@@ -11,6 +11,7 @@ def addNewAuthor(name: str, birth: str):
     author = Author(name=name, birth=birth)
     db.session.add(author)
     db.session.commit()
+    app.logger.info(f"New author with id: {author.id} added")
 
 
 def editAuthorByID(id: int, name: str, birth: str):
@@ -19,18 +20,20 @@ def editAuthorByID(id: int, name: str, birth: str):
         abort(400)
     author = Author.query.get(id)
     if not author:
-        abort(404)
+        abort(404, "Author is not found")
     if name:
         author.name = name
     if birth:
         author.birth = birth
     db.session.commit()
+    app.logger.info(f"The author {id} has been edited")
 
 
 def removeAuthorByID(id: int):
     """Remove author from DB by ID"""
     Author.query.filter_by(id=id).delete()
     db.session.commit()
+    app.logger.info(f"The author {id} has been removed")
 
 
 def getListOfAuthors(page: int, perPage: int) -> [Author]:
@@ -54,5 +57,5 @@ def getAuthorByID(id: int) -> Author:
         abort(400)
     author = Author.query.get(id)
     if not author:
-        abort(404)
+        abort(404, "Author is not found")
     return author.serialize()

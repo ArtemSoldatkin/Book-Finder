@@ -10,7 +10,7 @@ class Author(db.Model):
     birth = db.Column(db.String(10), nullable=False)
     books = db.relationship("Book", backref=db.backref('author'))
 
-    def __init__(self, name, birth):
+    def __init__(self, name: str, birth: str):
         self.name = name
         self.birth = birth
 
