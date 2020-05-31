@@ -9,7 +9,7 @@ def addNewBook(title: str, yearOfPublication: str, genre: str, authorID: int):
     """Add book to DB"""
     if not title or not checkYearOfPublication(yearOfPublication) or not genre or not authorID:
         abort(400)
-    if not Author.query.get(id=authorID):
+    if not Author.query.get(authorID):
         abort(404, "Author is not found")
     book = Book(title=title, yearOfPublication=yearOfPublication,
                 genre=genre, authorID=authorID)
@@ -52,6 +52,8 @@ def getBookList(page: int, perPage: int) -> [Book]:
 
 def getBookByID(id: int) -> Book:
     """Get book by ID from DB"""
+    if not id:
+        abort(400)
     book = Book.query.get(id)
     if not book:
         abort(404, "Book is not found")
